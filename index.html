@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Subscription Advisor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 4px solid #4CAF50;
+            background-color: #ffffff;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 1.8em;
+        }
+
+        p {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #555;
+        }
+
+        button {
+            display: block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            cursor: pointer;
+            border-radius: 15px;
+            transition: background-color 0.3s ease;
+            font-size: 1.3em;
+            margin-top: 30px;
+            width: 100%;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #388E3C;
+        }
+
+        #questionsValue {
+            font-size: 2em;
+            color: #007BFF;
+        }
+
+        select,
+        input[type=range] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>GPT Subscription Advisor</h2>
+        <p>Discover if GPT Plus subscription is right for you!</p>
+
+        <label>How many questions do you ask GPT daily?</label>
+        <input type="range" id="questions" min="0" max="1000" value="0" oninput="updateQuestionsValue()">
+        <div id="questionsValue">0</div>
+
+        <label>Which industry are you from?</label>
+        <select id="industry">
+            <option value="content">Content Creation</option>
+            <option value="tech">Tech and Software</option>
+            <option value="finance">Finance and Banking</option>
+            <option value="retail">Retail</option>
+            <option value="health">Healthcare</option>
+            <option value="other">Other</option>
+        </select>
+
+        <label>What's your primary use of GPT?</label>
+        <select id="usage">
+            <option value="faq">Answering FAQs</option>
+            <option value="calc">Complex Calculations or Analysis</option>
+            <option value="gen">Content Generation</option>
+            <option value="other">Other</option>
+        </select>
+
+        <label>How often do you make large requests?</label>
+        <select id="largeRequests">
+            <option value="rarely">Rarely</option>
+            <option value="often">Often</option>
+            <option value="always">Always</option>
+        </select>
+
+        <label>Size of your team using GPT:</label>
+        <select id="teamSize">
+            <option value="solo">Solo</option>
+            <option value="small">2-5 Members</option>
+            <option value="medium">6-20 Members</option>
+            <option value="large">21+ Members</option>
+        </select>
+
+        <button onclick="calculate()">Should I Go Plus?</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        function updateQuestionsValue() {
+            let questions = document.getElementById("questions").value;
+            document.getElementById("questionsValue").innerText = questions;
+        }
+
+        function calculate() {
+            let questions = parseInt(document.getElementById("questions").value);
+            let industry = document.getElementById("industry").value;
+            let usage = document.getElementById("usage").value;
+            let largeRequests = document.getElementById("largeRequests").value;
+            let teamSize = document.getElementById("teamSize").value;
+
+            let baseScore = questions;
+
+            if (largeRequests === "often") {
+                baseScore += 200;
+            } else if (largeRequests === "always") {
+                baseScore += 400;
+            }
+
+            if (teamSize === "small") {
+                baseScore += 100;
+            } else if (teamSize === "medium") {
+                baseScore += 200;
+            } else if (teamSize === "large") {
+                baseScore += 500;
+            }
+
+            if (baseScore > 700 || (industry === "content" && usage === "gen")) {
+                document.getElementById("result").innerText = "Based on your inputs, the GPT Plus subscription is highly recommended for you!";
+            } else if (baseScore > 400 && (industry === "tech" || usage === "calc")) {
+                document.getElementById("result").innerText = "Considering your usage, the GPT Plus subscription could be a great choice.";
+            } else {
+                document.getElementById("result").innerText = "The GPT free model may be enough for you. But always consider future growth and needs!";
+            }
+        }
+    </script>
+</body>
+
+</html>
